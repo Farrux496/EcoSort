@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="kaa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>EcoSort — Tábiyattı birge qorǵaymız</title>
+    <meta name="description" content="Qaraqalpaqstanda qaldıqlardı saralaw hám tabıs tabıw platforması. Tábiyattı birge qorǵaymız." />
+    <meta name="theme-color" content="#0D7C66" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta property="og:title" content="EcoSort — Tábiyattı birge qorǵaymız" />
+    <meta property="og:description" content="Qaraqalpaqstanda qaldıqlardı saralaw hám tabıs tabıw platforması. Tábiyattı birge qorǵaymız." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230D7C66'/><path d='M35 60 C35 40 50 30 70 30 C70 50 55 65 35 60 Z' fill='%2368D391'/><path d='M35 60 C50 50 65 45 70 30' stroke='%230D7C66' stroke-width='4' fill='none'/></svg>" />
+    <!-- Telegram Mini App SDK - see src/services/telegram.ts. Loads fine
+         outside Telegram too; the app just falls back to normal browser
+         behavior when it's not actually opened via the bot. -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  </head>
+  <body class="bg-slate-100 text-slate-800 antialiased selection:bg-emerald-100 selection:text-emerald-900 font-sans">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>
+

@@ -1,0 +1,21 @@
+{
+  "short_name": "EcoSort",
+  "name": "EcoSort — Tábiyattı birge qorǵaymız",
+  "icons": [
+    {
+      "src": "/pwa-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/pwa-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#F8FAFC",
+  "theme_color": "#0D7C66",
+  "display": "standalone",
+  "orientation": "portrait"
+}

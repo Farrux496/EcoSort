@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - EcoSort</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-green: #2ecc71;
+            --dark-green: #27ae60;
+            --light-green: #a9dfbf;
+            --accent-green: #1abc9c;
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+            --dark-gray: #333333;
+            --medium-gray: #95a5a6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+        }
+
+        /* Demo login gate */
+        .admin-login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .admin-login-box {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 40px;
+            max-width: 380px;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .admin-login-box i {
+            font-size: 2.5rem;
+            color: var(--primary-green);
+            margin-bottom: 15px;
+        }
+
+        .admin-login-box h1 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .demo-warning {
+            background: #fff4e0;
+            border: 1px solid #f0c674;
+            color: #8a6100;
+            border-radius: 6px;
+            padding: 10px 15px;
+            font-size: 0.8rem;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .admin-login-box input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+
+        .admin-login-box input:focus {
+            outline: none;
+            border-color: var(--primary-green);
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 6px;
+            background: var(--primary-green);
+            color: var(--white);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .btn:hover {
+            background: var(--dark-green);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .login-error {
+            color: #c0392b;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .login-error.visible {
+            display: block;
+        }
+
+        /* Admin app shell */
+        .admin-app {
+            display: none;
+        }
+
+        .admin-app.visible {
+            display: block;
+        }
+
+        .admin-header {
+            background: var(--white);
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .admin-header .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--dark-gray);
+        }
+
+        .admin-header .logo i {
+            color: var(--primary-green);
+        }
+
+        .admin-logout-btn {
+            background: transparent;
+            border: 1px solid #ccc;
+            color: var(--dark-gray);
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 5px;
+            padding: 15px 25px 0;
+            flex-wrap: wrap;
+            background: var(--white);
+        }
+
+        .admin-tab-btn {
+            padding: 10px 18px;
+            border: none;
+            background: transparent;
+            color: var(--medium-gray);
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-size: 0.9rem;
+        }
+
+        .admin-tab-btn.active {
+            color: var(--primary-green);
+            border-bottom-color: var(--primary-green);
+        }
+
+        .admin-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 25px;
+        }
+
+        .admin-panel {
+            display: none;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .demo-disclaimer {
+            background: #fff4e0;
+            border: 1px solid #f0c674;
+            color: #8a6100;
+            border-radius: 6px;
+            padding: 10px 15px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.8rem;
+            color: var(--medium-gray);
+            margin-bottom: 6px;
+        }
+
+        .stat-card .stat-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dark-gray);
+        }
+
+        .admin-table-wrap {
+            overflow-x: auto;
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        table.admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        table.admin-table th {
+            text-align: left;
+            padding: 12px 15px;
+            background: #f8f8f8;
+            font-size: 0.8rem;
+            color: var(--medium-gray);
+            text-transform: uppercase;
+            border-bottom: 1px solid #eee;
+        }
+
+        table.admin-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.9rem;
+            vertical-align: middle;
+        }
+
+        table.admin-table img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-badge.PENDING { background: #fff4e0; color: #b8860b; }
+        .status-badge.APPROVED { background: #e3f2fd; color: #1565c0; }
+        .status-badge.PAID { background: #e8f8ef; color: var(--dark-green); }
+        .status-badge.REJECTED { background: #fdecea; color: #c0392b; }
+
+        .row-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .action-btn.approve { background: var(--primary-green); color: var(--white); }
+        .action-btn.reject { background: #e74c3c; color: var(--white); }
+        .action-btn.pay { background: #1565c0; color: var(--white); }
+        .action-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: var(--medium-gray);
+        }
+
+        .rates-form .rate-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--white);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .rates-form .rate-row label {
+            flex: 1;
+            font-weight: 600;
+        }
+
+        .rates-form .rate-row input {
+            width: 120px;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        .rates-form .rate-row span {
+            color: var(--medium-gray);
+            font-size: 0.85rem;
+        }
+
+        .save-message {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--dark-green);
+            display: none;
+        }
+
+        .save-message.visible { display: block; }
+
+        h2.panel-title {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        @media (max-width: 600px) {
+            .admin-content { padding: 15px; }
+            .admin-tabs { padding: 10px 15px 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Demo login gate -->
+    <div class="admin-login-screen" id="loginScreen">
+        <div class="admin-login-box">
+            <i class="fas fa-shield-halved"></i>
+            <h1 data-i18n="admin.title">Admin Panel</h1>
+            <div class="demo-warning">
+                <strong data-i18n="admin.demoOnly">Demo only:</strong> <span data-i18n="admin.demoWarning">this password gate is a client-side convenience for the MVP. It is not secure and must be replaced with real server-side authentication before production use.</span>
+            </div>
+            <input type="password" id="adminPasswordInput" placeholder="Password" data-i18n-placeholder="admin.password">
+            <button type="button" class="btn btn-full" id="adminLoginBtn" data-i18n="admin.logIn">Log In</button>
+            <div class="login-error" id="loginError" data-i18n="admin.incorrectPassword">Incorrect password. Try again.</div>
+        </div>
+    </div>
+
+    <!-- Admin app -->
+    <div class="admin-app" id="adminApp">
+        <div class="admin-header">
+            <div class="logo"><i class="fas fa-recycle"></i> EcoSort Admin</div>
+            <div style="display:flex; align-items:center; gap:15px;">
+                <div id="langSwitcher"></div>
+                <button type="button" class="admin-logout-btn" id="adminLogoutBtn" data-i18n="admin.logOut">Log Out</button>
+            </div>
+        </div>
+
+        <div class="admin-tabs">
+            <button type="button" class="admin-tab-btn active" data-tab="dashboard" data-i18n="admin.tabDashboard">Dashboard</button>
+            <button type="button" class="admin-tab-btn" data-tab="submissions" data-i18n="admin.tabSubmissions">Waste Submissions</button>
+            <button type="button" class="admin-tab-btn" data-tab="withdrawals" data-i18n="admin.tabWithdrawals">Withdrawals</button>
+            <button type="button" class="admin-tab-btn" data-tab="rates" data-i18n="admin.tabRates">Waste Rates</button>
+            <button type="button" class="admin-tab-btn" data-tab="users" data-i18n="admin.tabUsers">Users</button>
+            <button type="button" class="admin-tab-btn" data-tab="gamestats" data-i18n="admin.tabGameStats">Game Statistics</button>
+        </div>
+
+        <div class="admin-content">
+            <div class="demo-disclaimer" data-i18n="admin.demoDisclaimer">
+                MVP demo data: everything below comes from this browser's local storage only. There is no shared server database yet - see README for the future-backend migration plan.
+            </div>
+
+            <div class="admin-panel active" id="panel-dashboard">
+                <h2 class="panel-title" data-i18n="admin.tabDashboard">Dashboard</h2>
+                <div class="stats-grid" id="dashboardStats"></div>
+            </div>
+
+            <div class="admin-panel" id="panel-submissions">
+                <h2 class="panel-title" data-i18n="admin.tabSubmissions">Waste Submissions</h2>
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th data-i18n="admin.colPhoto">Photo</th><th data-i18n="admin.colUser">User</th><th data-i18n="admin.colType">Type</th><th data-i18n="admin.colWeight">Weight</th><th data-i18n="admin.colReward">Reward</th><th data-i18n="admin.colDate">Date</th><th data-i18n="admin.colStatus">Status</th><th data-i18n="admin.colAction">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="submissionsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="admin-panel" id="panel-withdrawals">
+                <h2 class="panel-title" data-i18n="admin.tabWithdrawals">Withdrawals</h2>
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th data-i18n="admin.colUser">User</th><th data-i18n="admin.colAmount">Amount</th><th data-i18n="admin.colDestination">Destination</th><th data-i18n="admin.colDate">Date</th><th data-i18n="admin.colStatus">Status</th><th data-i18n="admin.colAction">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="withdrawalsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="admin-panel" id="panel-rates">
+                <h2 class="panel-title" data-i18n="admin.ratesTitle">Waste Rates (UZS / kg)</h2>
+                <div class="rates-form" id="ratesForm"></div>
+                <button type="button" class="btn" id="saveRatesBtn" data-i18n="admin.saveRates">Save Rates</button>
+                <div class="save-message" id="ratesSaveMessage" data-i18n="admin.ratesUpdated">Rates updated.</div>
+            </div>
+
+            <div class="admin-panel" id="panel-users">
+                <h2 class="panel-title" data-i18n="admin.tabUsers">Users</h2>
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th data-i18n="admin.colUserId">User ID</th><th data-i18n="admin.colSubmissions">Submissions</th><th data-i18n="admin.colTotalKg">Total kg</th><th data-i18n="admin.colEarnedUZS">Earned UZS</th><th data-i18n="admin.colWithdrawals">Withdrawals</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="admin-panel" id="panel-gamestats">
+                <h2 class="panel-title" data-i18n="admin.tabGameStats">Game Statistics</h2>
+                <div class="stats-grid" id="gameStatsGrid"></div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var loginScreen = document.getElementById('loginScreen');
+        var adminApp = document.getElementById('adminApp');
+        var passwordInput = document.getElementById('adminPasswordInput');
+        var loginBtn = document.getElementById('adminLoginBtn');
+        var loginError = document.getElementById('loginError');
+        var logoutBtn = document.getElementById('adminLogoutBtn');
+
+        function fmt(n) {
+            return (Number(n) || 0).toLocaleString('en-US') + ' UZS';
+        }
+
+        function getByPathLocal(obj, path) {
+            var parts = path.split('.');
+            var cur = obj;
+            for (var i = 0; i < parts.length; i++) {
+                if (cur == null) return null;
+                cur = cur[parts[i]];
+            }
+            return (typeof cur === 'string') ? cur : null;
+        }
+
+        function translate(key, fallback) {
+            return (window.__chiqindiDict && getByPathLocal(window.__chiqindiDict, key)) || fallback;
+        }
+
+        document.addEventListener('chiqindi:language-changed', function (e) {
+            window.__chiqindiDict = e.detail && e.detail.dict;
+            if (adminApp.classList.contains('visible')) renderAll();
+        });
+
+        function showApp() {
+            loginScreen.style.display = 'none';
+            adminApp.classList.add('visible');
+            renderAll();
+        }
+
+        function attemptLogin() {
+            if (!window.Chiqindi || !window.Chiqindi.admin) return;
+            var result = window.Chiqindi.admin.loginAsAdmin(passwordInput.value);
+            if (result.success) {
+                loginError.classList.remove('visible');
+                showApp();
+            } else {
+                loginError.classList.add('visible');
+            }
+        }
+
+        loginBtn.addEventListener('click', attemptLogin);
+        passwordInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') attemptLogin();
+        });
+
+        logoutBtn.addEventListener('click', function () {
+            if (window.Chiqindi && window.Chiqindi.admin) window.Chiqindi.admin.logoutAdmin();
+            adminApp.classList.remove('visible');
+            loginScreen.style.display = 'flex';
+            passwordInput.value = '';
+        });
+
+        // Tabs
+        document.querySelectorAll('.admin-tab-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.admin-tab-btn').forEach(function (b) { b.classList.remove('active'); });
+                document.querySelectorAll('.admin-panel').forEach(function (p) { p.classList.remove('active'); });
+                btn.classList.add('active');
+                document.getElementById('panel-' + btn.getAttribute('data-tab')).classList.add('active');
+            });
+        });
+
+        function renderDashboard() {
+            var stats = window.Chiqindi.admin.getDashboardStats();
+            var el = document.getElementById('dashboardStats');
+            el.innerHTML =
+                statCard(translate('admin.statTotalSubmissions', 'Total Submissions'), stats.totalSubmissions) +
+                statCard(translate('admin.statPendingReview', 'Pending Review'), stats.pendingSubmissions) +
+                statCard(translate('admin.statApproved', 'Approved'), stats.approvedSubmissions) +
+                statCard(translate('admin.statRejected', 'Rejected'), stats.rejectedSubmissions) +
+                statCard(translate('admin.statTotalRewarded', 'Total Rewarded'), fmt(stats.totalRewardedUZS)) +
+                statCard(translate('admin.statPendingWithdrawals', 'Pending Withdrawals'), stats.totalPendingWithdrawals) +
+                statCard(translate('admin.statPendingWithdrawalAmount', 'Pending Withdrawal Amount'), fmt(stats.totalWithdrawalsPendingUZS)) +
+                statCard(translate('admin.statTotalUsers', 'Total Users'), stats.totalUsers);
+        }
+
+        function statCard(label, value) {
+            return '<div class="stat-card"><div class="stat-label">' + label + '</div><div class="stat-value">' + value + '</div></div>';
+        }
+
+        function statusLabel(status) {
+            var map = {
+                PENDING: translate('wallet.statusPending', 'Pending'),
+                APPROVED: translate('wallet.statusApproved', 'Approved'),
+                PAID: translate('wallet.statusPaid', 'Paid'),
+                REJECTED: translate('wallet.statusRejected', 'Rejected')
+            };
+            return map[status] || status;
+        }
+
+        function wasteTypeLabel(type) {
+            var map = {
+                paper: translate('recycle.typePaper', 'Paper'),
+                plastic: translate('recycle.typePlastic', 'Plastic'),
+                metal: translate('recycle.typeMetal', 'Metal'),
+                ewaste: translate('recycle.typeEwaste', 'E-Waste'),
+                mixed: translate('recycle.typeMixed', 'Mixed Waste')
+            };
+            return map[type] || type;
+        }
+
+        function renderSubmissions() {
+            var subs = window.Chiqindi.admin.getAllSubmissions().slice().reverse();
+            var tbody = document.getElementById('submissionsTableBody');
+            if (subs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="empty-state">' + translate('admin.noSubmissions', 'No submissions yet.') + '</td></tr>';
+                return;
+            }
+            var html = '';
+            subs.forEach(function (s) {
+                var photo = s.photo ? '<img src="' + s.photo + '" alt="">' : '-';
+                var canReview = s.status === 'PENDING';
+                html += '<tr>' +
+                    '<td>' + photo + '</td>' +
+                    '<td>' + s.userId + '</td>' +
+                    '<td>' + wasteTypeLabel(s.wasteType) + '</td>' +
+                    '<td>' + s.weightKg + ' kg</td>' +
+                    '<td>' + fmt(s.estimatedReward) + '</td>' +
+                    '<td>' + new Date(s.createdAt).toLocaleDateString() + '</td>' +
+                    '<td><span class="status-badge ' + s.status + '">' + statusLabel(s.status) + '</span></td>' +
+                    '<td><div class="row-actions">' +
+                        '<button class="action-btn approve" data-action="approve-sub" data-id="' + s.id + '"' + (canReview ? '' : ' disabled') + '>' + translate('admin.approve', 'Approve') + '</button>' +
+                        '<button class="action-btn reject" data-action="reject-sub" data-id="' + s.id + '"' + (canReview ? '' : ' disabled') + '>' + translate('admin.reject', 'Reject') + '</button>' +
+                    '</div></td>' +
+                '</tr>';
+            });
+            tbody.innerHTML = html;
+
+            tbody.querySelectorAll('[data-action="approve-sub"]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    window.Chiqindi.recycling.approveSubmission(btn.getAttribute('data-id'), 'admin');
+                    renderAll();
+                });
+            });
+            tbody.querySelectorAll('[data-action="reject-sub"]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    window.Chiqindi.recycling.rejectSubmission(btn.getAttribute('data-id'), 'admin');
+                    renderAll();
+                });
+            });
+        }
+
+        function renderWithdrawals() {
+            var list = window.Chiqindi.admin.getAllWithdrawals().slice().reverse();
+            var tbody = document.getElementById('withdrawalsTableBody');
+            if (list.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-state">' + translate('admin.noWithdrawals', 'No withdrawal requests yet.') + '</td></tr>';
+                return;
+            }
+            var html = '';
+            list.forEach(function (w) {
+                var canApprove = w.status === 'PENDING';
+                var canReject = w.status === 'PENDING';
+                var canPay = w.status === 'APPROVED';
+                html += '<tr>' +
+                    '<td>' + w.userId + '</td>' +
+                    '<td>' + fmt(w.amountUZS) + '</td>' +
+                    '<td>' + w.destination + '</td>' +
+                    '<td>' + new Date(w.createdAt).toLocaleDateString() + '</td>' +
+                    '<td><span class="status-badge ' + w.status + '">' + statusLabel(w.status) + '</span></td>' +
+                    '<td><div class="row-actions">' +
+                        '<button class="action-btn approve" data-action="approve-wd" data-id="' + w.id + '"' + (canApprove ? '' : ' disabled') + '>' + translate('admin.approve', 'Approve') + '</button>' +
+                        '<button class="action-btn pay" data-action="pay-wd" data-id="' + w.id + '"' + (canPay ? '' : ' disabled') + '>' + translate('admin.markPaid', 'Mark Paid') + '</button>' +
+                        '<button class="action-btn reject" data-action="reject-wd" data-id="' + w.id + '"' + (canReject ? '' : ' disabled') + '>' + translate('admin.reject', 'Reject') + '</button>' +
+                    '</div></td>' +
+                '</tr>';
+            });
+            tbody.innerHTML = html;
+
+            tbody.querySelectorAll('[data-action="approve-wd"]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    window.Chiqindi.wallet.approveWithdrawal(btn.getAttribute('data-id'), 'admin');
+                    renderAll();
+                });
+            });
+            tbody.querySelectorAll('[data-action="pay-wd"]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    window.Chiqindi.wallet.markWithdrawalPaid(btn.getAttribute('data-id'));
+                    renderAll();
+                });
+            });
+            tbody.querySelectorAll('[data-action="reject-wd"]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    window.Chiqindi.wallet.rejectWithdrawal(btn.getAttribute('data-id'), 'admin');
+                    renderAll();
+                });
+            });
+        }
+
+        var RATE_TYPES = ['paper', 'plastic', 'metal', 'ewaste', 'mixed'];
+
+        function renderRates() {
+            var rates = window.Chiqindi.admin.getWasteRates();
+            var el = document.getElementById('ratesForm');
+            var html = '';
+            RATE_TYPES.forEach(function (type) {
+                html += '<div class="rate-row">' +
+                    '<label>' + wasteTypeLabel(type) + '</label>' +
+                    '<input type="number" min="0" step="10" data-rate-type="' + type + '" value="' + rates[type] + '">' +
+                    '<span>UZS / kg</span>' +
+                '</div>';
+            });
+            el.innerHTML = html;
+        }
+
+        document.getElementById('saveRatesBtn').addEventListener('click', function () {
+            document.querySelectorAll('[data-rate-type]').forEach(function (input) {
+                window.Chiqindi.admin.updateWasteRate(input.getAttribute('data-rate-type'), input.value);
+            });
+            var msg = document.getElementById('ratesSaveMessage');
+            msg.classList.add('visible');
+            setTimeout(function () { msg.classList.remove('visible'); }, 2000);
+        });
+
+        function renderUsers() {
+            var users = window.Chiqindi.admin.getAllUsers();
+            var tbody = document.getElementById('usersTableBody');
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="empty-state">' + translate('admin.noUsers', 'No users yet.') + '</td></tr>';
+                return;
+            }
+            var html = '';
+            users.forEach(function (u) {
+                html += '<tr>' +
+                    '<td>' + u.userId + '</td>' +
+                    '<td>' + u.submissions + '</td>' +
+                    '<td>' + u.totalKg.toFixed(1) + ' kg</td>' +
+                    '<td>' + fmt(u.totalEarnedUZS) + '</td>' +
+                    '<td>' + u.withdrawals + '</td>' +
+                '</tr>';
+            });
+            tbody.innerHTML = html;
+        }
+
+        function renderGameStats() {
+            var stats = window.Chiqindi.admin.getGameStats();
+            var el = document.getElementById('gameStatsGrid');
+            el.innerHTML =
+                statCard(translate('game.level', 'Level'), stats.level) +
+                statCard('XP', stats.xp) +
+                statCard(translate('admin.statTotalCoinsEarned', 'Total Coins Earned'), stats.totalCoinsEarned + ' \uD83E\uDE99') +
+                statCard(translate('admin.statCurrentCoins', 'Current Coins'), stats.coins + ' \uD83E\uDE99') +
+                statCard(translate('admin.statMissionsCompleted', 'Missions Completed'), stats.missionsCompleted);
+        }
+
+        function renderAll() {
+            if (!window.Chiqindi || !window.Chiqindi.admin) return;
+            renderDashboard();
+            renderSubmissions();
+            renderWithdrawals();
+            renderRates();
+            renderUsers();
+            renderGameStats();
+        }
+
+        if (window.Chiqindi && window.Chiqindi.admin && window.Chiqindi.admin.isAdminAuthenticated()) {
+            showApp();
+        }
+    });
+</script>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="js/telegram.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/recycling.js"></script>
+    <script src="js/wallet.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

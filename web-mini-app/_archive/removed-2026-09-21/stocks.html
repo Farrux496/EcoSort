@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stocks - E-Waste Recycling System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-green: #2ecc71;
+            --dark-green: #27ae60;
+            --light-green: #a9dfbf;
+            --accent-green: #1abc9c;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --dark-gray: #333333;
+            --medium-gray: #95a5a6;
+            --text-light: #6c757d;
+            --border-light: #e9ecef;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #fafafa;
+            color: var(--dark-gray);
+            line-height: 1.6;
+        }
+        
+        /* Navigation Bar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--white);
+            padding: 1rem 5%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 0.7rem 5%;
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-icon {
+            color: var(--primary-green);
+            font-size: 1.8rem;
+            margin-right: 0.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-gray);
+        }
+
+        .logo-text span {
+            color: var(--primary-green);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links li {
+            margin: 0 1rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-gray);
+            font-weight: 500;
+            font-size: 1rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary-green);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-green);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after, .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-left: 1rem;
+        }
+
+        .btn-login, .btn-register {
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .btn-login {
+            background-color: transparent;
+            border: 1px solid var(--primary-green);
+            color: var(--primary-green);
+        }
+
+        .btn-login:hover {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+
+        .btn-register {
+            background-color: var(--primary-green);
+            color: var(--white);
+            border: 1px solid var(--primary-green);
+        }
+
+        .btn-register:hover {
+            background-color: var(--dark-green);
+            border-color: var(--dark-green);
+        }
+
+        .toggle-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-gray);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 0 20px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Header Section */
+        .page-header {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 16px;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Search and Filter Section */
+        .controls-section {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 32px;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 400px;
+            margin: 0 auto 24px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--primary-green);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 20px;
+            border: none;
+            background: transparent;
+            color: var(--text-light);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary-green);
+            color: white;
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-light);
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+
+        .product-image {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--primary-green);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .product-content {
+            padding: 20px;
+        }
+
+        .product-category {
+            color: var(--primary-green);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .product-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .product-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+
+        .feature-tag {
+            background: #f8f9fa;
+            color: var(--text-light);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .product-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dark-gray);
+        }
+
+        .price-save {
+            background: #fef2f2;
+            color: #dc2626;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .add-to-cart {
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-to-cart:hover {
+            background: var(--dark-green);
+        }
+
+        .wishlist-btn {
+            background: transparent;
+            border: 1px solid var(--border-light);
+            color: var(--text-light);
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wishlist-btn:hover {
+            border-color: var(--primary-green);
+            color: var(--primary-green);
+        }
+
+      
+
+        /* Footer Section - Keeping Original */
+        .footer {
+            background-color: var(--dark-gray);
+            color: var(--white);
+            padding: 4rem 2rem 2rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-info {
+            max-width: 350px;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-logo-icon {
+            color: var(--primary-green);
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+        
+        .footer-logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+        
+        .footer-logo-text span {
+            color: var(--primary-green);
+        }
+        
+        .footer-description {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            background-color: var(--primary-green);
+            transform: translateY(-3px);
+        }
+        
+        .footer-title {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary-green);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-green);
+            padding-left: 5px;
+        }
+        
+        .footer-contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .contact-icon {
+            color: var(--primary-green);
+            font-size: 1rem;
+            margin-right: 1rem;
+            min-width: 20px;
+        }
+        
+        .contact-text {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+        }
+        
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .copyright {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .footer-bottom-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .footer-bottom-links a {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-bottom-links a:hover {
+            color: var(--primary-green);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem 5%;
+            }
+            
+            .toggle-menu {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                flex-direction: column;
+                background-color: var(--white);
+                width: 70%;
+                height: 100vh;
+                padding: 5rem 2rem;
+                transition: all 0.5s ease;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-links li {
+                margin: 1.5rem 0;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .controls-section {
+                margin: 0 -4px 24px;
+                border-radius: 8px;
+            }
+
+            .filter-tabs {
+                gap: 4px;
+            }
+
+            .filter-btn {
+                padding: 6px 16px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 0 16px;
+            }
+
+            .page-header {
+                padding: 40px 0 32px;
+            }
+
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-recycle logo-icon"></i>
+            <div class="logo-text">Eco-<span>Tech</span></div>
+        </div>
+        
+        <ul class="nav-links">
+            <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+            <li><a href="tutorial.html" data-i18n="nav.tutorial">Tutorial</a></li>
+            <li><a href="recycle.html" data-i18n="nav.recycle">Recycle</a></li>
+            <li><a href="game.html" data-i18n="nav.game">Game</a></li>
+            <li><a href="wallet.html" data-i18n="nav.wallet">Wallet</a></li>
+            <li><a href="collections.html" data-i18n="nav.collections">Collections</a></li>
+            <li><a href="cart.html" class="active" data-i18n="nav.stocks">Stocks</a></li>
+            <li><a href="about.html" data-i18n="nav.about">About</a></li>
+            <div class="auth-buttons">
+                <a href="../legacy-php/login.php"><button class="btn btn-login" id="openLoginModal" data-i18n="nav.login">Login</button></a>
+                <button class="btn btn-register" id="openRegisterModal" data-i18n="nav.register">Register</button>
+            </div>
+            <div class="close-menu"></div>
+        </ul>
+        
+        <div class="toggle-menu">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        
+
+        <!-- Search and Filter Controls -->
+        <div class="controls-section">
+            <div class="page-header">
+                <h1 class="page-title" data-i18n="stocks.pageTitle">Refurbished Electronics</h1>
+                <p class="page-subtitle">Discover quality tech products at amazing prices while helping the environment</p>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid">
+            <!-- Product 1 -->
+            <div class="product-card" data-category="laptops">
+                <div class="product-image">
+                    <img src="assets/images/stocks/lap.jpg" alt="Refurbished Laptop">
+                    <div class="product-badge" data-i18n="stocks.badgeCertified">Certified</div>
+                </div>
+                <div class="product-content">
+                    <div class="product-category" data-i18n="stocks.catLaptops">Laptops</div>
+                    <div class="product-title">Dell XPS 13 Ultrabook</div>
+                    <div class="product-description" data-i18n="stocks.desc1">Intel i7, 8GB RAM, 256GB SSD. Perfect for work and entertainment with excellent battery life.</div>
+                    <div class="product-features">
+                        <!-- <span class="feature-tag">8GB RAM</span>
+                        <span class="feature-tag">256GB SSD</span>
+                        <span class="feature-tag">Full HD</span>
+                        <span class="feature-tag">6 Month Warranty</span> -->
+                    </div>
+                    <div class="product-footer">
+                        <div class="price-section">
+                            <div class="product-price">UZS 50,000</div>
+                         
+                        </div>
+                        <div class="product-actions">
+                            <button class="add-to-cart" data-i18n="stocks.addToCart">Add to Cart</button>
+                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card" data-category="monitors">
+                <div class="product-image">
+                    <img src="assets/images/stocks/1-DELL-P2311.webp" alt="LCD Monitor">
+                    <div class="product-badge" data-i18n="stocks.badgePopular">Popular</div>
+                </div>
+                <div class="product-content">
+                    <div class="product-category" data-i18n="stocks.catMonitors">Monitors</div>
+                    <div class="product-title">Samsung 24" Full HD Monitor</div>
+                    <div class="product-description" data-i18n="stocks.desc2">Crystal clear display with vibrant colors. Perfect for gaming and professional work.</div>
+                    <div class="product-features">
+                        <!-- <span class="feature-tag">Full HD</span>
+                        <span class="feature-tag">24 Inch</span>
+                        <span class="feature-tag">HDMI</span>
+                        <span class="feature-tag">3 Month Warranty</span> -->
+                    </div>
+                    <div class="product-footer">
+                        <div class="price-section">
+                            <div class="product-price">UZS 25,000</div>
+                            
+                        </div>
+                        <div class="product-actions">
+                            <button class="add-to-cart" data-i18n="stocks.addToCart">Add to Cart</button>
+                            <!-- <button class="wishlist-btn"><i class="fas fa-heart"></i></button> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card" data-category="phones">
+                <div class="product-image">
+                    <img src="assets/images/stocks/phone.webp" alt="Smartphone">
+                    <div class="product-badge" data-i18n="stocks.badgeLikeNew">Like New</div>
+                </div>
+                <div class="product-content">
+                    <div class="product-category" data-i18n="stocks.catSmartphones">Smartphones</div>
+                    <div class="product-title">iPhone 11 Unlocked</div>
+                    <div class="product-description" data-i18n="stocks.desc3">64GB storage, 90% battery health. Fully unlocked and ready to use with any carrier.</div>
+                    <div class="product-features">
+                        <!-- <span class="feature-tag">64GB</span>
+                        <span class="feature-tag">90% Battery</span>
+                        <span class="feature-tag">Unlocked</span>
+                        <span class="feature-tag">1 Year Warranty</span> -->
+                    </div>
+                    <div class="product-footer">
+                        <div class="price-section">
+                            <div class="product-price">UZS 40,000</div>
+                        
+                        </div>
+                        <div class="product-actions">
+                            <button class="add-to-cart" data-i18n="stocks.addToCart">Add to Cart</button>
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product-card" data-category="accessories">
+                <div class="product-image">
+                    <img src="assets/images/wk.jpg" alt="Wireless Keyboard">
+                    <div class="product-badge" data-i18n="stocks.badgeMint">Mint</div>
+                </div>
+                <div class="product-content">
+                    <div class="product-category" data-i18n="stocks.catAccessories">Accessories</div>
+                    <div class="product-title">Logitech Wireless Keyboard</div>
+                    <div class="product-description" data-i18n="stocks.desc4">Mechanical switches with RGB backlighting. Perfect for gaming and productivity.</div>
+                    <div class="product-features">
+                       
+                    </div>
+                    <div class="product-footer">
+                        <div class="price-section">
+                            <div class="product-price">UZS 5,000</div>
+                            
+                        </div>
+                        <div class="product-actions">
+                           <a href="cart.html"> <button class="add-to-cart" data-i18n="stocks.addToCart">Add to Cart</button></a>
+                    
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="product-card" data-category="components">
+                <div class="product-image">
+                    <img src="assets/images/stocks/gc.avif" alt="Graphics Card">
+                    <div class="product-badge" data-i18n="stocks.badgeGaming">Gaming</div>
+                </div>
+                <div class="product-content">
+                    <div class="product-category" data-i18n="stocks.catComponents">Components</div>
+                    <div class="product-title">NVIDIA GTX 1660 Super</div>
+                    <div class="product-description" data-i18n="stocks.desc5">High-performance graphics card for gaming and creative work. Thoroughly tested and verified.</div>
+                    <div class="product-features">
+                      
+                    </div>
+                    <div class="product-footer">
+                        <div class="price-section">
+                            <div class="product-price">UZS 25,000</div>
+                            <!-- <div class="price-save">Save 50%</div> -->
+                        </div>
+                        <div class="product-actions">
+                            <button class="add-to-cart" data-i18n="stocks.addToCart">Add to Cart</button>
+                            <!-- <button class="wishlist-btn"><i class="fas fa-heart"></i></button> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 6 -->
+            <div class="product-card" data-category="laptops">
+                <div class="product-image">
+                    <img src="assets/images/stocks/lap.jpg" alt="Gaming Laptop">
+                    <div class="product-badge" data-i18n="stocks.badgeGaming">Gaming</div>
+                </div>
+                <div class="product-content">
+                    <div class="product-category" data-i18n="stocks.catLaptops">Laptops</div>
+                    <div class="product-title">HP Pavilion Gaming Laptop</div>
+                    <div class="product-description" data-i18n="stocks.desc6">AMD Ryzen 5, 16GB RAM, 512GB SSD, GTX 1650. Perfect for gaming and creative work.</div>
+                    <div class="product-features">
+                      
+                    </div>
+                    <div class="product-footer">
+                        <div class="price-section">
+                            <div class="product-price">UZS 65,000</div>
+                            <!-- <div class="price-save">Save 35%</div> -->
+                        </div>
+                        <div class="product-actions">
+                            <button class="add-to-cart" data-i18n="stocks.addToCart">Add to Cart</button>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <div class="stats-grid">
+               
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-info">
+                <div class="footer-logo">
+                    <i class="fas fa-recycle footer-logo-icon"></i>
+                    <div class="footer-logo-text">Eco-<span>Tech</span></div>
+                </div>
+                <div class="footer-description">
+                    We are committed to providing innovative and sustainable solutions 
+                    for electronic waste management, helping create a cleaner future for our planet.
+                </div>
+                <div class="footer-social">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            
+            <div>
+                <h3 class="footer-title" data-i18n="footer.quickLinks">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+                    <li><a href="tutorial.html" data-i18n="nav.tutorial">Tutorial</a></li>
+                    <li><a href="collections.html" data-i18n="nav.collections">Collections</a></li>
+                    <li><a href="stocks.html" data-i18n="nav.stocks">Stocks</a></li>
+                    <li><a href="about.html" data-i18n="footer.linkAbout">About Us</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3 class="footer-title">Services</h3>
+                <ul class="footer-links">
+                    <li><a href="#" data-i18n="footer.serviceCollection">E-Waste Collection</a></li>
+                    <li><a href="#">Device Refurbishing</a></li>
+                    <li><a href="#">Data Destruction</a></li>
+                    <li><a href="#">Corporate Solutions</a></li>
+                    <li><a href="#">Recycling Programs</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3 class="footer-title">Contact Info</h3>
+                <div class="footer-contact-item">
+                    <i class="fas fa-map-marker-alt contact-icon"></i>
+                    <div class="contact-text">12 Amir Temur Street, Tashkent</div>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-phone contact-icon"></i>
+                    <div class="contact-text">+998 90 123 45 67</div>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-envelope contact-icon"></i>
+                    <div class="contact-text">info@chiqindi.uz</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="copyright">
+                © 2024 Eco-Tech. All rights reserved.
+            </div>
+            <div class="footer-bottom-links">
+                <a href="#" data-i18n="footer.privacyPolicy">Privacy Policy</a>
+                <a href="#" data-i18n="footer.termsOfService">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Filter functionality
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const productCards = document.querySelectorAll('.product-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+
+                const filterValue = btn.getAttribute('data-filter');
+
+                productCards.forEach(card => {
+                    if (filterValue === 'all') {
+                        card.style.display = 'block';
+                    } else {
+                        const cardCategory = card.getAttribute('data-category');
+                        if (cardCategory === filterValue) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+
+        // Search functionality
+        const searchBox = document.querySelector('.search-box');
+        searchBox.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            productCards.forEach(card => {
+                const title = card.querySelector('.product-title').textContent.toLowerCase();
+                const description = card.querySelector('.product-description').textContent.toLowerCase();
+                const category = card.querySelector('.product-category').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm) || category.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        const toggleMenu = document.querySelector('.toggle-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        toggleMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Add to cart functionality
+        const addToCartBtns = document.querySelectorAll('.add-to-cart');
+        addToCartBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.textContent = 'Added!';
+                btn.style.background = '#27ae60';
+                setTimeout(() => {
+                    btn.textContent = 'Add to Cart';
+                    btn.style.background = '#2ecc71';
+                }, 2000);
+            });
+        });
+
+        // Wishlist functionality
+        const wishlistBtns = document.querySelectorAll('.wishlist-btn');
+        wishlistBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const icon = btn.querySelector('i');
+                if (icon.classList.contains('fas')) {
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                    btn.style.color = '#6c757d';
+                } else {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    btn.style.color = '#dc3545';
+                }
+            });
+        });
+        
+
+
+        // Add this JavaScript code to your stocks.html page to integrate with the cart
+
+// Product data structure matching your current products
+const products = [
+    {
+        id: 'laptop-dell-xps',
+        name: 'Dell XPS 13 Ultrabook',
+        category: 'Laptops',
+        price: 50000,
+        image: 'assets/images/stocks/lap.jpg',
+        description: 'Intel i7, 8GB RAM, 256GB SSD. Perfect for work and entertainment with excellent battery life.'
+    },
+    {
+        id: 'monitor-samsung',
+        name: 'Samsung 24" Full HD Monitor',
+        category: 'Monitors',
+        price: 25000,
+        image: 'assets/images/stocks/1-DELL-P2311.webp',
+        description: 'Crystal clear display with vibrant colors. Perfect for gaming and professional work.'
+    },
+    {
+        id: 'phone-iphone11',
+        name: 'iPhone 11 Unlocked',
+        category: 'Smartphones',
+        price: 40000,
+        image: 'assets/images/stocks/phone.webp',
+        description: '64GB storage, 90% battery health. Fully unlocked and ready to use with any carrier.'
+    },
+    {
+        id: 'keyboard-logitech',
+        name: 'Logitech Wireless Keyboard',
+        category: 'Accessories',
+        price: 5000,
+        image: 'assets/images/wk.jpg',
+        description: 'Mechanical switches with RGB backlighting. Perfect for gaming and productivity.'
+    },
+    {
+        id: 'gpu-nvidia',
+        name: 'NVIDIA GTX 1660 Super',
+        category: 'Components',
+        price: 25000,
+        image: 'assets/images/stocks/gc.avif',
+        description: 'High-performance graphics card for gaming and creative work. Thoroughly tested and verified.'
+    },
+    {
+        id: 'laptop-hp-gaming',
+        name: 'HP Pavilion Gaming Laptop',
+        category: 'Laptops',
+        price: 65000,
+        image: 'assets/images/stocks/lap.jpg',
+        description: 'AMD Ryzen 5, 16GB RAM, 512GB SSD, GTX 1650. Perfect for gaming and creative work.'
+    }
+];
+
+// Cart functions
+function loadCart() {
+    const savedCart = localStorage.getItem('ecoTechCart');
+    return savedCart ? JSON.parse(savedCart) : [];
+}
+
+function saveCart(cart) {
+    localStorage.setItem('ecoTechCart', JSON.stringify(cart));
+}
+
+function addToCart(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
+    let cart = loadCart();
+    const existingItem = cart.find(item => item.id === productId);
+    
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({
+            ...product,
+            quantity: 1
+        });
+    }
+    
+    saveCart(cart);
+    
+    // Show success message
+    showCartNotification(product.name);
+}
+
+function showCartNotification(productName) {
+    // Create a notification element
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: #2ecc71;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 10000;
+        font-weight: 500;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    `;
+    notification.innerHTML = `
+        <i class="fas fa-check-circle" style="margin-right: 8px;"></i>
+        ${productName} added to cart!
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Animate in
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 10);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+
+// Replace your existing add to cart event listeners with this:
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all add to cart buttons
+    const addToCartBtns = document.querySelectorAll('.add-to-cart');
+    
+    // Add product IDs to buttons (you'll need to add these data attributes to your HTML)
+    const productButtons = [
+        { selector: '.product-card[data-category="laptops"]:nth-child(1) .add-to-cart', id: 'laptop-dell-xps' },
+        { selector: '.product-card[data-category="monitors"] .add-to-cart', id: 'monitor-samsung' },
+        { selector: '.product-card[data-category="phones"] .add-to-cart', id: 'phone-iphone11' },
+        { selector: '.product-card[data-category="accessories"] .add-to-cart', id: 'keyboard-logitech' },
+        { selector: '.product-card[data-category="components"] .add-to-cart', id: 'gpu-nvidia' },
+        { selector: '.product-card[data-category="laptops"]:nth-child(6) .add-to-cart', id: 'laptop-hp-gaming' }
+    ];
+    
+    // Add click event listeners
+    addToCartBtns.forEach((btn, index) => {
+        const productId = products[index]?.id;
+        if (productId) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                addToCart(productId);
+                
+                // Visual feedback
+                const originalText = btn.textContent;
+                btn.textContent = 'Added!';
+                btn.style.background = '#27ae60';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#2ecc71';
+                }, 2000);
+            });
+        }
+    });
+    
+    // Update cart count in navigation (if you want to show cart count)
+    updateCartCount();
+});
+
+function updateCartCount() {
+    const cart = loadCart();
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    
+    // If you want to show cart count in navigation, add this HTML to your nav:
+    // <span class="cart-count" id="cartCount">0</span>
+    const cartCountElement = document.getElementById('cartCount');
+    if (cartCountElement) {
+        cartCountElement.textContent = totalItems;
+        cartCountElement.style.display = totalItems > 0 ? 'inline' : 'none';
+    }
+}
+    </script>
+    <!-- Telegram Mini App integration (Phase 4) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="js/telegram.js"></script>
+    <script src="js/i18n.js"></script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Waste Collection System</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f7f0;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        
+        .container {
+            width: 80%;
+            max-width: 1000px;
+            margin: 30px auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            overflow: hidden;
+    }
+        /* Available Stocks Section Styles */
+        .stocks-container {
+            width: 80%;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+        
+        .stocks-heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-image {
+            height: 200px;
+            background-color: #e8f5e9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .product-details {
+            padding: 20px;
+        }
+        
+        .product-title {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #2e7d32;
+        }
+        
+        .product-description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+            height: 40px;
+            overflow: hidden;
+        }
+        
+        .product-price {
+            font-weight: bold;
+            font-size: 20px;
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .add-to-cart {
+            width: 100%;
+            padding: 10px;
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .add-to-cart:hover {
+            background-color: #1b5e20;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1000px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+    <!-- Available Stocks Section -->
+    <div class="stocks-container">
+        <div class="stocks-heading">
+            <h1>Available Stocks</h1>
+            <p>Browse our collection of refurbished electronics and components</p>
+        </div>
+        
+        <div class="products-grid">
+            <!-- Product 1 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="/api/placeholder/300/200" alt="Refurbished Laptop">
+                </div>
+                <div class="product-details">
+                    <div class="product-title">Refurbished Laptop</div>
+                    <div class="product-description">Dell XPS 13, 8GB RAM, 256GB SSD, excellent condition</div>
+                    <div class="product-price">rs 50 000/=</div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+            
+            <!-- Product 2 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="" alt="LCD Monitor">
+                </div>
+                <div class="product-details">
+                    <div class="product-title">LCD Monitor</div>
+                    <div class="product-description">24-inch Samsung monitor, Full HD, refurbished</div>
+                    <div class="product-price">rs 25000/=</div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+            
+            <!-- Product 3 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="wk.jpg" alt="Smartphone">
+                </div>
+                <div class="product-details">
+                    <div class="product-title">Smartphone</div>
+                    <div class="product-description">iPhone 11, 64GB, battery health 90%, unlocked</div>
+                    <div class="product-price">Rs 40 000/=</div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+            
+            <!-- Product 4 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="/api/placeholder/300/200" alt="Wireless Keyboard">
+                </div>
+                <div class="product-details">
+                    <div class="product-title">Wireless Keyboard</div>
+                    <div class="product-description">Logitech mechanical keyboard, backlit, like new</div>
+                    <div class="product-price">rs 5 000/=</div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+            
+            <!-- Product 5 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="/api/placeholder/300/200" alt="Computer Parts">
+                </div>
+                <div class="product-details">
+                    <div class="product-title">Graphics Card</div>
+                    <div class="product-description">NVIDIA GTX 1660 Super, tested and working</div>
+                    <div class="product-price">rs 25 000/=</div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+            
+            <!-- Product 6 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="/api/placeholder/300/200" alt="Tablet">
+                </div>
+                <div class="product-details">
+                    <div class="product-title">Tablet</div>
+                    <div class="product-description">iPad Air, 64GB, Wi-Fi, refurbished with warranty</div>
+                    <div class="product-price">$259.99</div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('collectionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const productName = document.getElementById('productName').value;
+            const quantity = document.getElementById('quantity').value;
+            const price = document.getElementById('price').value;
+            const email = document.getElementById('email').value;
+            
+            // Here you would typically send the data to a server
+            // For now, we'll just show an alert
+            alert(`Thank you for your submission!\n\nProduct: ${productName}\nQuantity: ${quantity}\nPrice: ${price}\nEmail: ${email}\n\nWe will contact you shortly to arrange collection.`);
+            
+            // Optionally reset the form
+            this.reset();
+        });
+        
+        // Add to cart functionality
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const productCard = this.closest('.product-card');
+                const productTitle = productCard.querySelector('.product-title').textContent;
+                const productPrice = productCard.querySelector('.product-price').textContent;
+                
+                alert(`Added to cart: ${productTitle} - ${productPrice}`);
+            });
+        });
+    </script>
+</body>
+</html>

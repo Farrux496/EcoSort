@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoSort</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-green: #2ecc71;
+            --dark-green: #27ae60;
+            --light-green: #a9dfbf;
+            --accent-green: #1abc9c;
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+            --dark-gray: #333333;
+            --medium-gray: #95a5a6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            overflow-x: hidden;
+        }
+        
+        /* Navigation Bar */
+        .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--white);
+    padding: 1rem 5%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.navbar.scrolled {
+    padding: 0.7rem 5%;
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-icon {
+    color: var(--primary-green);
+    font-size: 1.8rem;
+    margin-right: 0.5rem;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dark-gray);
+}
+
+.logo-text span {
+    color: var(--primary-green);
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    align-items: center;
+}
+
+.nav-links li {
+    margin: 0 1rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--dark-gray);
+    font-weight: 500;
+    font-size: 1rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: var(--primary-green);
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-green);
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after, .nav-links a.active::after {
+    width: 100%;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-left: 1rem;
+}
+
+.btn-login, .btn-register {
+    padding: 0.6rem 1.2rem;
+    border-radius: 50px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 0.9rem;
+}
+
+.btn-login {
+    background-color: transparent;
+    border: 1px solid var(--primary-green);
+    color: var(--primary-green);
+}
+
+.btn-login:hover {
+    background-color: var(--primary-green);
+    color: var(--white);
+}
+
+.btn-register {
+    background-color: var(--primary-green);
+    color: var(--white);
+    border: 1px solid var(--primary-green);
+}
+
+.btn-register:hover {
+    background-color: var(--dark-green);
+    border-color: var(--dark-green);
+}
+
+.toggle-menu {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--dark-gray);
+}
+
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.1) 0%, rgba(26, 188, 156, 0.2) 100%);
+            overflow: hidden;
+            padding-top: 70px;
+        }
+        
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            padding: 0 2rem;
+            z-index: 1;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark-gray);
+            line-height: 1.2;
+        }
+        
+        .hero-title span.highlight-word {
+            color: var(--primary-green);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            color: var(--medium-gray);
+        }
+        
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+        }
+        
+        .btn-learn {
+            background-color: var(--dark-gray);
+            color: var(--white);
+            border: 1px solid var(--dark-gray);
+        }
+        
+        .btn-learn:hover {
+            background-color: var(--medium-gray);
+            border-color: var(--medium-gray);
+        }
+        
+        .hero-image {
+            position: absolute;
+            bottom: -5%;
+            right: -5%;
+            width: 50%;
+            max-width: 600px;
+            opacity: 0.8;
+            z-index: 0;
+        }
+        
+        /* Services Section */
+        .services {
+            padding: 5rem 2rem;
+            background-color: var(--white);
+            text-align: center;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark-gray);
+        }
+        
+        .section-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            color: var(--medium-gray);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .service-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .service-icon {
+            font-size: 2.5rem;
+            color: var(--primary-green);
+            margin-bottom: 1.5rem;
+            transition: all 0.5s ease;
+        }
+        
+        .service-card:hover  {
+            transform: rotateY(360deg);
+        }
+        
+        .service-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--dark-gray);
+        }
+        
+        .service-description {
+            font-size: 0.95rem;
+            color: var(--medium-gray);
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+        
+        .service-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: var(--primary-green);
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .service-link:hover {
+            color: var(--dark-green);
+        }
+        
+        /* Why Choose Us Section */
+        .why-choose {
+            padding: 5rem 2rem;
+            background-color: var(--light-gray);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .why-choose-content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 3rem;
+        }
+        
+        .why-choose-text {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .why-choose-image {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .image-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .choose-list {
+            margin-top: 2rem;
+            list-style: none;
+        }
+        
+        .choose-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+        
+        .choose-icon {
+            color: var(--primary-green);
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            min-width: 25px;
+        }
+        
+        .choose-item-content {
+            flex: 1;
+        }
+        
+        .choose-item-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-gray);
+        }
+        
+        .choose-item-description {
+            font-size: 0.95rem;
+            color: var(--medium-gray);
+            line-height: 1.6;
+        }
+        
+        /* Stats Section */
+        .stats {
+            padding: 4rem 2rem;
+            background-color: var(--primary-green);
+            color: var(--white);
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .stat-item {
+            padding: 1.5rem;
+        }
+        
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-text {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        /* CTA Section */
+        .cta {
+            padding: 5rem 2rem;
+            background-color: var(--white);
+            text-align: center;
+        }
+        
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark-gray);
+        }
+        
+        .cta-description {
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            color: var(--medium-gray);
+            line-height: 1.6;
+        }
+        
+        /* Footer Section */
+        .footer {
+            background-color: var(--dark-gray);
+            color: var(--white);
+            padding: 4rem 2rem 2rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-info {
+            max-width: 350px;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-logo-icon {
+            color: var(--primary-green);
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+        
+        .footer-logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+        
+        .footer-logo-text span {
+            color: var(--primary-green);
+        }
+        
+        .footer-description {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            background-color: var(--primary-green);
+            transform: translateY(-3px);
+        }
+        
+        .footer-title {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary-green);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-green);
+            padding-left: 5px;
+        }
+        
+        .footer-contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .contact-icon {
+            color: var(--primary-green);
+            font-size: 1rem;
+            margin-right: 1rem;
+            min-width: 20px;
+        }
+        
+        .contact-text {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+        }
+        
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .copyright {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .footer-bottom-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .footer-bottom-links a {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-bottom-links a:hover {
+            color: var(--primary-green);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+        }
+        
+        .modal-content {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            transform: translateY(-50px);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--medium-gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: var(--dark-gray);
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark-gray);
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.2);
+        }
+        
+        .form-button {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary-green);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .form-button:hover {
+            background-color: var(--dark-green);
+        }
+        
+        .form-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--medium-gray);
+        }
+        
+        .form-footer a {
+            color: var(--primary-green);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .form-footer a:hover {
+            color: var(--dark-green);
+        }
+        
+        /* Media Queries */
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .why-choose-content {
+                flex-direction: column;
+            }
+            
+            .why-choose-image {
+                order: -1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem 5%;
+            }
+            
+            .toggle-menu {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                flex-direction: column;
+                background-color: var(--white);
+                width: 70%;
+                height: 100vh;
+                padding: 5rem 2rem;
+                transition: all 0.5s ease;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-links li {
+                margin: 1.5rem 0;
+            }
+            
+            .close-menu {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                font-size: 1.5rem;
+                color: var(--dark-gray);
+                cursor: pointer;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .service-card {
+                padding: 1.5rem;
+            }
+            
+            .footer-content {
+                gap: 2rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .logo-text {
+                font-size: 1.3rem;
+            }
+            
+            .auth-buttons {
+                display: none;
+            }
+            
+            .nav-links .auth-buttons {
+                display: flex;
+                flex-direction: column;
+                margin-top: 2rem;
+                width: 100%;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .section-subtitle {
+                font-size: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stat-item {
+                padding: 1rem;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+            }
+            
+            .footer-bottom-links {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        .delay-1 {
+            animation-delay: 0.1s;
+        }
+        
+        .delay-2 {
+            animation-delay: 0.3s;
+        }
+        
+        .delay-3 {
+            animation-delay: 0.5s;
+        }
+        
+        .delay-4 {
+            animation-delay: 0.7s;
+        }
+        
+        /* Icon Animations */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        .rotate {
+            animation: rotate 5s linear infinite;
+        }
+        
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+
+
+
+
+
+        
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-recycle logo-icon"></i>
+            <div class="logo-text">Eco<span>Sort</span></div>
+        </div>
+        
+        <ul class="nav-links">
+            <li><a href="index.html" class="active" data-i18n="nav.home">Home</a></li>
+            <li><a href="recycle.html" data-i18n="nav.recycle">Recycle</a></li>
+            <li><a href="game.html" data-i18n="nav.game">Game</a></li>
+            <li><a href="wallet.html" data-i18n="nav.wallet">Wallet</a></li>
+            <!-- <li><a href="#" data-i18n="nav.collections">Collections</a></li> -->
+            <li><a href="about.html" data-i18n="nav.about">About</a></li>
+            <div class="auth-buttons" id="langSwitcher"></div>
+            <div class="close-menu">
+               
+            </div>
+        </ul>
+        
+       
+        
+        <div class="toggle-menu">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title fade-in"><span data-i18n="home.heroTitlePre">Creating </span><span class="highlight-word" data-i18n="home.heroTitleHighlight">Value </span><span data-i18n="home.heroTitlePost">from Discarded Electronics</span></h1>
+            <p class="hero-subtitle fade-in delay-1" data-i18n="home.heroSubtitle">Join our sustainable ecosystem to recycle waste efficiently and contribute to a greener planet for future generations.</p>
+            <div class="hero-buttons">
+                <a href="recycle.html"> <button class="btn btn-large btn-register fade-in delay-2" data-i18n="home.getStarted">Get Started</button></a>
+                <!-- <button class="btn btn-large btn-learn fade-in delay-2">Learn More</button> -->
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="" alt="E-Waste Recycling Illustration">
+        </div>
+    </section>
+    
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <h2 class="section-title" data-i18n="home.servicesTitle">Our Services</h2>
+        <p class="section-subtitle" data-i18n="home.servicesSubtitle">We provide comprehensive electronic waste management solutions to help you dispose of unwanted electronics responsibly.</p>
+        
+        <div class="services-grid">
+            <div class="service-card fade-in">
+                <i class="fas fa-laptop service-icon"></i>
+                <h3 class="service-title" data-i18n="footer.serviceCollection">E-Waste Collection</h3>
+                <p class="service-description" data-i18n="home.service1Desc">We collect all types of electronic waste from homes, offices, and institutions with our convenient pickup service.</p>
+                <a href="#" class="service-link"><span data-i18n="home.learnMore">Learn More</span> <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="service-card fade-in delay-1">
+                <i class="fas fa-recycle service-icon"></i>
+                <h3 class="service-title" data-i18n="footer.serviceProcess">Recycling Process</h3>
+                <p class="service-description" data-i18n="home.service2Desc">Our state-of-the-art facilities ensure that electronic components are recycled using environmentally friendly methods.</p>
+                <a href="#" class="service-link"><span data-i18n="home.learnMore">Learn More</span> <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="service-card fade-in delay-2">
+                <i class="fas fa-shield-alt service-icon"></i>
+                <h3 class="service-title" data-i18n="footer.serviceSecurity">Data Security</h3>
+                <p class="service-description" data-i18n="home.service3Desc">We guarantee complete data destruction from all storage devices before recycling to protect your privacy.</p>
+                <a href="#" class="service-link"><span data-i18n="home.learnMore">Learn More</span> <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="service-card fade-in delay-3">
+                <i class="fas fa-certificate service-icon"></i>
+                <h3 class="service-title" data-i18n="footer.serviceCertification">Certification</h3>
+                <p class="service-description" data-i18n="home.service4Desc">Receive official certificates of recycling for proper documentation and compliance with environmental regulations.</p>
+                <a href="#" class="service-link"><span data-i18n="home.learnMore">Learn More</span> <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Why Choose Us Section -->
+    <section class="why-choose" id="why-choose">
+        <div class="why-choose-content">
+            <div class="why-choose-text">
+                <h2 class="section-title" data-i18n="home.whyChooseTitle">Why Choose EcoSort</h2>
+                <p class="section-subtitle" data-i18n="home.whyChooseSubtitle">We stand out from other recycling services with our commitment to sustainability, technology, and customer satisfaction.</p>
+                
+                <ul class="choose-list">
+                    <li class="choose-item fade-in">
+                        <i class="fas fa-check-circle choose-icon pulse"></i>
+                        <div class="choose-item-content">
+                            <h3 class="choose-item-title" data-i18n="home.choose1Title">Environmentally Responsible</h3>
+                            <p class="choose-item-description" data-i18n="home.choose1Desc">Our zero-landfill policy ensures that 100% of collected e-waste is either recycled or repurposed, minimizing environmental impact.</p>
+                        </div>
+                    </li>
+                    
+                    <li class="choose-item fade-in delay-1">
+                        <i class="fas fa-check-circle choose-icon pulse"></i>
+                        <div class="choose-item-content">
+                            <h3 class="choose-item-title" data-i18n="home.choose2Title">Advanced Technology</h3>
+                            <p class="choose-item-description" data-i18n="home.choose2Desc">We utilize cutting-edge recycling technology to maximize resource recovery and ensure efficient processing of all electronic components.</p>
+                        </div>
+                    </li>
+                    
+                    <li class="choose-item fade-in delay-2">
+                        <i class="fas fa-check-circle choose-icon pulse"></i>
+                        <div class="choose-item-content">
+                            <h3 class="choose-item-title" data-i18n="home.choose3Title">Compliance Guaranteed</h3>
+                            <p class="choose-item-description" data-i18n="home.choose3Desc">All our recycling processes comply with national and international environmental standards and regulations.</p>
+                        </div>
+                    </li>
+                    
+                    <li class="choose-item fade-in delay-3">
+                        <i class="fas fa-check-circle choose-icon pulse"></i>
+                        <div class="choose-item-content">
+                            <h3 class="choose-item-title" data-i18n="home.choose4Title">Transparent Tracking</h3>
+                            <p class="choose-item-description" data-i18n="home.choose4Desc">Our digital platform allows you to track your e-waste from collection to recycling, providing complete transparency.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="why-choose-image fade-in">
+                <div class="image-container">
+                    <img src="assets/images/pngtree-ewaste-recycling-character-disposes-of-monitor-in-bin-vector-png-image_12739984.png" alt="E-Waste Recycling Process">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item fade-in">
+                <i class="fas fa-laptop stat-icon"></i>
+                <div class="stat-number" id="stat-devices">510</div>
+                <div class="stat-text" data-i18n="home.statDevices">Devices Recycled</div>
+            </div>
+            
+            <div class="stat-item fade-in delay-1">
+                <i class="fas fa-users stat-icon"></i>
+                <div class="stat-number" id="stat-customers">78</div>
+                <div class="stat-text" data-i18n="home.statCustomers">Happy Customers</div>
+            </div>
+            
+           
+            
+            <div class="stat-item fade-in delay-3">
+                <i class="fas fa-building stat-icon"></i>
+                <div class="stat-number" id="stat-partners">10</div>
+                <div class="stat-text" data-i18n="home.statPartners">Business Partners</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-content">
+            <h2 class="cta-title fade-in" data-i18n="home.ctaTitle">Ready to Recycle Your E-Waste?</h2>
+            <p class="cta-description fade-in delay-1" data-i18n="home.ctaDescription">Join our sustainable initiative today and contribute to a cleaner environment. Schedule a pickup or find a drop-off location near you.</p>
+            <div class="hero-buttons">
+                <a href="recycle.html"><button class="btn btn-large btn-register fade-in delay-2" data-i18n="home.schedulePickup">Schedule Pickup</button></a>
+                <!-- <button class="btn btn-large btn-learn fade-in delay-2">Find Locations</button> -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-info">
+                <div class="footer-logo">
+                    <i class="fas fa-recycle footer-logo-icon"></i>
+                    <div class="footer-logo-text">Eco<span>Sort</span></div>
+                </div>
+                <p class="footer-description">
+                    We are committed to providing innovative and sustainable solutions 
+                    for electronic waste management, helping create a cleaner future for our planet.
+                </p>
+                <div class="footer-social">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-links-section">
+                <h3 class="footer-title" data-i18n="footer.quickLinks">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#" data-i18n="nav.home">Home</a></li>
+                    <li><a href="#" data-i18n="nav.collections">Collections</a></li>
+                    <li><a href="#" data-i18n="footer.linkAbout">About Us</a></li>
+                    <li><a href="#" data-i18n="footer.linkContact">Contact</a></li>
+                </ul>
+            </div>
+            
+<div class="footer-links-section">
+                <h3 class="footer-title" data-i18n="footer.contactUs">Contact Us</h3>
+                <div class="footer-contact-item">
+                    <i class="fas fa-map-marker-alt contact-icon"></i>
+                    <div class="contact-text">12 Amir Temur Street, Tashkent</div>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-phone-alt contact-icon"></i>
+                    <div class="contact-text">+998 90 123 45 67</div>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-envelope contact-icon"></i>
+                    <div class="contact-text">info@ecosort.uz</div>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-clock contact-icon"></i>
+                    <div class="contact-text">Mon - Fri: 9:00 AM - 6:00 PM</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="copyright">© 2025 EcoSort. All Rights Reserved.</div>
+        </div>
+    </footer>
+    
+    <script>
+        // DOM Elements
+        const navbar = document.querySelector('.navbar');
+        const toggleMenu = document.querySelector('.toggle-menu');
+        const closeMenu = document.querySelector('.close-menu');
+        const navLinks = document.querySelector('.nav-links');
+        const statDevices = document.getElementById('stat-devices');
+        const statCustomers = document.getElementById('stat-customers');
+        const statCarbon = document.getElementById('stat-carbon');
+        const statPartners = document.getElementById('stat-partners');
+
+        // Navigation Menu Toggle
+        toggleMenu.addEventListener('click', () => {
+            navLinks.classList.add('active');
+        });
+
+        closeMenu.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+        });
+
+        // Scroll Event for Navbar
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Scroll to section when clicking on nav links
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+
+                // Close the mobile menu if open
+                if (navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                }
+
+                // If it's a section link, scroll to it
+                if (href.startsWith('#') && href.length > 1) {
+                    e.preventDefault();
+                    const targetSection = document.querySelector(href);
+                    if (targetSection) {
+                        const offsetTop = targetSection.offsetTop - navbar.offsetHeight;
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Animation for statistics counters
+        function animateStats() {
+            const statsSection = document.querySelector('.stats');
+            const statsSectionTop = statsSection.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+
+            if (statsSectionTop < windowHeight * 0.8) {
+                animateCounter(statDevices, 15000, 2000);
+                animateCounter(statCustomers, 7500, 2000);
+                animateCounter(statCarbon, 3000, 2000);
+                animateCounter(statPartners, 250, 2000);
+                window.removeEventListener('scroll', animateStats);
+            }
+        }
+
+        function animateCounter(element, target, duration) {
+            let start = 0;
+            const increment = Math.ceil(target / 50);
+            const startTime = performance.now();
+
+            function updateCounter(currentTime) {
+                const elapsedTime = currentTime - startTime;
+                if (elapsedTime < duration) {
+                    const progress = elapsedTime / duration;
+                    const currentValue = Math.floor(progress * target);
+                    element.textContent = currentValue.toLocaleString();
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    element.textContent = target.toLocaleString();
+                }
+            }
+
+            requestAnimationFrame(updateCounter);
+        }
+
+        // Initialize animations on scroll
+        window.addEventListener('scroll', animateStats);
+        window.addEventListener('load', () => {
+            // Check if elements are already in view when page loads
+            animateStats();
+
+            // Initialize intersection observer for fade-in animations
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            fadeElements.forEach(element => {
+                element.style.opacity = 0;
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                observer.observe(element);
+            });
+        });
+    </script>
+    <!-- Telegram Mini App integration (Phase 4) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="js/telegram.js"></script>
+    <script src="js/i18n.js"></script>
+</body>
+</html>

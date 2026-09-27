@@ -1,0 +1,19 @@
+[build]
+  # The Telegram Mini App / static frontend now lives in mini-app/ (a
+  # React + Vite app - formerly a separate project, "EcoSort", merged in
+  # to replace the old static web-mini-app/, which is kept for reference
+  # under legacy-web-mini-app/ and is no longer deployed).
+  base = "mini-app"
+  # --legacy-peer-deps: the app's Vite 8 + @tailwindcss/vite combo has a
+  # peer-dependency mismatch on esbuild that plain `npm install` refuses.
+  command = "npm install --legacy-peer-deps && npm run build"
+  publish = "mini-app/dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[redirects]]
+  # Single-page app: any deep link falls back to index.html.
+  from = "/*"
+  to = "/index.html"
+  status = 200

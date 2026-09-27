@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Clicker - EcoSort</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/colstyles.css">
+    <style>
+        :root {
+            --primary-green: #2ecc71;
+            --dark-green: #27ae60;
+            --light-green: #a9dfbf;
+            --accent-green: #1abc9c;
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+            --dark-gray: #333333;
+            --medium-gray: #95a5a6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            overflow-x: hidden;
+        }
+        
+          /* Navigation Bar */
+       /* Navigation Bar Styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--white);
+    padding: 1rem 5%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.navbar.scrolled {
+    padding: 0.7rem 5%;
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-icon {
+    color: var(--primary-green);
+    font-size: 1.8rem;
+    margin-right: 0.5rem;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dark-gray);
+}
+
+.logo-text span {
+    color: var(--primary-green);
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    align-items: center;
+}
+
+.nav-links li {
+    margin: 0 1rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--dark-gray);
+    font-weight: 500;
+    font-size: 1rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: var(--primary-green);
+}
+
+/* .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-green);
+    transition: width 0.3s ease;
+} */
+
+.nav-links a:hover::after, .nav-links a.active::after {
+    width: 100%;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-left: 1rem;
+}
+
+.btn-login, .btn-register {
+    padding: 0.6rem 1.2rem;
+    border-radius: 50px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 0.9rem;
+}
+
+.btn-login {
+    background-color: transparent;
+    border: 1px solid var(--primary-green);
+    color: var(--primary-green);
+}
+
+.btn-login:hover {
+    background-color: var(--primary-green);
+    color: var(--white);
+}
+
+.btn-register {
+    background-color: var(--primary-green);
+    color: var(--white);
+    border: 1px solid var(--primary-green);
+}
+
+.btn-register:hover {
+    background-color: var(--dark-green);
+    border-color: var(--dark-green);
+}
+
+.toggle-menu {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--dark-gray);
+}
+
+        /* Page Content */
+        .main-content {
+            padding-top: 100px;
+            min-height: calc(100vh - 400px); /* Account for navbar and footer */
+        }
+        
+        .tutorial-header {
+            background-color: var(--primary-green);
+            color: var(--white);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .tutorial-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tutorial-header p {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .tutorial-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        
+        .tutorial-section {
+            margin-bottom: 4rem;
+        }
+        
+        .tutorial-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .tutorial-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark-gray);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tutorial-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-green);
+        }
+        
+        .tutorial-section p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--medium-gray);
+            margin-bottom: 1.5rem;
+        }
+        
+        .tutorial-steps {
+            counter-reset: step-counter;
+            list-style: none;
+            margin: 2rem 0;
+        }
+        
+        .tutorial-step {
+            display: flex;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+        
+        .tutorial-step:last-child {
+            margin-bottom: 0;
+        }
+        
+        .step-number {
+            flex: 0 0 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary-green);
+            color: var(--white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-right: 1.5rem;
+            position: relative;
+        }
+        
+        .step-number::before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+        }
+        
+        .step-number::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            width: 2px;
+            height: calc(100% + 30px);
+            background-color: var(--light-green);
+            transform: translateX(-50%);
+        }
+        
+        .tutorial-step:last-child .step-number::after {
+            display: none;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--dark-gray);
+        }
+        
+        .step-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--medium-gray);
+        }
+        
+        .tutorial-image {
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 2rem 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tutorial-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .tutorial-note {
+            background-color: rgba(46, 204, 113, 0.1);
+            border-left: 4px solid var(--primary-green);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 5px;
+        }
+        
+        .tutorial-note h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            color: var(--dark-gray);
+        }
+        
+        .tutorial-note p {
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+        
+        .tutorial-video {
+            margin: 2rem 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .video-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .video-play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background-color: rgba(46, 204, 113, 0.9);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .video-play-button:hover {
+            background-color: var(--primary-green);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        
+        .video-play-button i {
+            color: var(--white);
+            font-size: 2rem;
+            margin-left: 8px; /* Offset for the play icon */
+        }
+        
+        .cta-box {
+            background-color: var(--dark-green);
+            padding: 3rem 2rem;
+            border-radius: 10px;
+            text-align: center;
+            color: var(--white);
+            margin: 3rem 0;
+        }
+        
+        .cta-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-box p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .btn-white {
+            background-color: var(--white);
+            color: var(--dark-green);
+            border: 1px solid var(--white);
+        }
+        
+        .btn-white:hover {
+            background-color: transparent;
+            color: var(--white);
+        }
+        
+        .btn-outline-white {
+            background-color: transparent;
+            color: var(--white);
+            border: 1px solid var(--white);
+        }
+        
+        .btn-outline-white:hover {
+            background-color: var(--white);
+            color: var(--dark-green);
+        }
+        
+        /* Footer Section */
+        .footer {
+            background-color: var(--dark-gray);
+            color: var(--white);
+            padding: 4rem 2rem 2rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-info {
+            max-width: 350px;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-logo-icon {
+            color: var(--primary-green);
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+        
+        .footer-logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+        
+        .footer-logo-text span {
+            color: var(--primary-green);
+        }
+        
+        .footer-description {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            background-color: var(--primary-green);
+            transform: translateY(-3px);
+        }
+        
+        .footer-title {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary-green);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-green);
+            padding-left: 5px;
+        }
+        
+        .footer-contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .contact-icon {
+            color: var(--primary-green);
+            font-size: 1rem;
+            margin-right: 1rem;
+            min-width: 20px;
+        }
+        
+        .contact-text {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+        }
+        
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .copyright {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .footer-bottom-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .footer-bottom-links a {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-bottom-links a:hover {
+            color: var(--primary-green);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+        }
+        
+        .modal-content {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            transform: translateY(-50px);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--medium-gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: var(--dark-gray);
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark-gray);
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.2);
+        }
+        
+        .form-button {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary-green);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .form-button:hover {
+            background-color: var(--dark-green);
+        }
+        
+        .form-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--medium-gray);
+        }
+        
+        .form-footer a {
+            color: var(--primary-green);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .form-footer a:hover {
+            color: var(--dark-green);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        .delay-1 {
+            animation-delay: 0.1s;
+        }
+        
+        .delay-2 {
+            animation-delay: 0.3s;
+        }
+        
+        .delay-3 {
+            animation-delay: 0.5s;
+        }
+        
+        .delay-4 {
+            animation-delay: 0.7s;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 992px) {
+            .tutorial-container {
+                padding: 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem 5%;
+            }
+            
+            .toggle-menu {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                flex-direction: column;
+                background-color: var(--white);
+                width: 70%;
+                height: 100vh;
+                padding: 5rem 2rem;
+                transition: all 0.5s ease;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-links li {
+                margin: 1.5rem 0;
+            }
+            
+            .close-menu {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                font-size: 1.5rem;
+                color: var(--dark-gray);
+                cursor: pointer;
+            }
+            
+            .tutorial-header h1 {
+                font-size: 2rem;
+            }
+            
+            .tutorial-section h2 {
+                font-size: 1.8rem;
+            }
+            
+            .step-number {
+                flex: 0 0 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+            
+            .step-title {
+                font-size: 1.2rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .footer-content {
+                gap: 2rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .tutorial-header {
+                padding: 3rem 1.5rem;
+            }
+            
+            .tutorial-container {
+                padding: 2rem 1.5rem;
+            }
+            
+            .tutorial-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .tutorial-section h2 {
+                font-size: 1.5rem;
+            }
+            
+            .tutorial-step {
+                flex-direction: column;
+            }
+            
+            .step-number {
+                margin-bottom: 1rem;
+                margin-right: 0;
+            }
+            
+            .step-number::after {
+                display: none;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+            }
+            
+            .footer-bottom-links {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+        /* Eco Clicker game (Phase 8) */
+        .game-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 25px;
+        }
+
+        .game-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .game-stat-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            text-align: center;
+        }
+
+        .game-stat-card .stat-label {
+            font-size: 0.8rem;
+            color: var(--medium-gray);
+            margin-bottom: 6px;
+        }
+
+        .game-stat-card .stat-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark-gray);
+        }
+
+        .level-progress {
+            background: #eee;
+            border-radius: 20px;
+            height: 10px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .level-progress-fill {
+            background: var(--primary-green);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .click-zone {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f1fdf7;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .click-button {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+            color: var(--white);
+            font-size: 3rem;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+            transition: transform 0.1s ease;
+            user-select: none;
+        }
+
+        .click-button:active {
+            transform: scale(0.94);
+        }
+
+        .click-hint {
+            margin-top: 15px;
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+
+        .daily-reward-box {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .daily-reward-box .btn {
+            display: inline-block;
+        }
+
+        .daily-reward-box .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .game-section {
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .game-section h2 {
+            font-size: 1.4rem;
+            color: var(--dark-gray);
+            margin-bottom: 15px;
+        }
+
+        .upgrade-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            background: var(--white);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .upgrade-info .upg-name {
+            font-weight: 600;
+            color: var(--dark-gray);
+        }
+
+        .upgrade-info .upg-meta {
+            font-size: 0.85rem;
+            color: var(--medium-gray);
+        }
+
+        .upgrade-buy-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            background: var(--primary-green);
+            color: var(--white);
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .upgrade-buy-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .mission-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            background: var(--white);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .mission-card.completed {
+            opacity: 0.6;
+        }
+
+        .mission-info .mis-name {
+            font-weight: 600;
+            color: var(--dark-gray);
+        }
+
+        .mission-info .mis-reward {
+            font-size: 0.85rem;
+            color: var(--medium-gray);
+        }
+
+        .mission-claim-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            background: var(--primary-green);
+            color: var(--white);
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .mission-claim-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .mission-done-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: #e8f8ef;
+            color: var(--dark-green);
+            white-space: nowrap;
+        }
+
+        .form-message {
+            margin-top: 15px;
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            display: none;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-message.visible {
+            display: block;
+        }
+
+        .form-message.success {
+            background: #e8f8ef;
+            color: var(--dark-green);
+            border: 1px solid var(--primary-green);
+        }
+
+        .form-message.error {
+            background: #fdecea;
+            color: #c0392b;
+            border: 1px solid #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-recycle logo-icon"></i>
+            <div class="logo-text">Eco<span>Sort</span></div>
+        </div>
+        
+        <ul class="nav-links">
+            <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+            <li><a href="recycle.html" data-i18n="nav.recycle">Recycle</a></li>
+            <li><a href="game.html" class="active" data-i18n="nav.game">Game</a></li>
+            <li><a href="wallet.html" data-i18n="nav.wallet">Wallet</a></li>
+            <li><a href="about.html" data-i18n="nav.about">About</a></li>
+            <div class="auth-buttons" id="langSwitcher"></div>
+            <div class="close-menu">
+             
+            </div>
+        </ul>
+        
+        
+        <div class="toggle-menu">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+    <br><br><br>
+
+    <div class="game-container">
+        <h1 class="page-title" data-i18n="game.pageTitle">Eco Clicker</h1>
+
+        <div class="game-stats-grid">
+            <div class="game-stat-card">
+                <div class="stat-label" data-i18n="game.coins">Coins</div>
+                <div class="stat-value" id="statCoins">0 🪙</div>
+            </div>
+            <div class="game-stat-card">
+                <div class="stat-label" data-i18n="game.level">Level</div>
+                <div class="stat-value" id="statLevel">1</div>
+                <div class="level-progress"><div class="level-progress-fill" id="levelProgressFill" style="width:0%"></div></div>
+            </div>
+            <div class="game-stat-card">
+                <div class="stat-label" data-i18n="game.perSecond">Per Second</div>
+                <div class="stat-value" id="statCps">0</div>
+            </div>
+        </div>
+
+        <div class="click-zone">
+            <button type="button" class="click-button" id="clickButton">♻️</button>
+            <div class="click-hint" id="clickHint" data-i18n="game.clickHint">Tap to earn coins</div>
+            <div class="daily-reward-box">
+                <button type="button" class="btn" id="dailyRewardButton" data-i18n="game.claimDaily">Claim Daily Reward</button>
+            </div>
+        </div>
+
+        <div id="gameMessage" class="form-message"></div>
+
+        <div class="game-section">
+            <h2 data-i18n="game.upgradesTitle">Upgrades</h2>
+            <div id="upgradesList"></div>
+        </div>
+
+        <div class="game-section">
+            <h2 data-i18n="game.missionsTitle">Missions &amp; Achievements</h2>
+            <div id="missionsList"></div>
+        </div>
+    </div>
+   <!-- Footer Section -->
+   <footer class="footer">
+    <div class="footer-content">
+        <div class="footer-info">
+            <div class="footer-logo">
+                <i class="fas fa-recycle footer-logo-icon"></i>
+                <div class="footer-logo-text">Eco<span>Sort</span></div>
+            </div>
+            <p class="footer-description">
+                We are committed to providing innovative and sustainable solutions for electronic waste management, helping create a cleaner future for our planet.
+            </p>
+            <div class="footer-social">
+                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+        
+        <div class="footer-links-section">
+            <h3 class="footer-title" data-i18n="footer.quickLinks">Quick Links</h3>
+            <ul class="footer-links">
+                <li><a href="#" data-i18n="nav.home">Home</a></li>
+                <li><a href="#" data-i18n="nav.collections">Collections</a></li>
+                <li><a href="#" data-i18n="footer.linkAbout">About Us</a></li>
+                <li><a href="#" data-i18n="footer.linkContact">Contact</a></li>
+            </ul>
+        </div>
+        
+<div class="footer-links-section">
+            <h3 class="footer-title" data-i18n="footer.contactUs">Contact Us</h3>
+            <div class="footer-contact-item">
+                <i class="fas fa-map-marker-alt contact-icon"></i>
+                <div class="contact-text">12 Amir Temur Street, Tashkent</div>
+            </div>
+            <div class="footer-contact-item">
+                <i class="fas fa-phone-alt contact-icon"></i>
+                <div class="contact-text">+998 90 123 45 67</div>
+            </div>
+            <div class="footer-contact-item">
+                <i class="fas fa-envelope contact-icon"></i>
+                <div class="contact-text">info@ecosort.uz</div>
+            </div>
+            <div class="footer-contact-item">
+                <i class="fas fa-clock contact-icon"></i>
+                <div class="contact-text">Mon - Fri: 9:00 AM - 6:00 PM</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer-bottom">
+        <div class="copyright">© 2025 EcoSort. All Rights Reserved.</div>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var statCoins = document.getElementById('statCoins');
+        var statLevel = document.getElementById('statLevel');
+        var statCps = document.getElementById('statCps');
+        var levelProgressFill = document.getElementById('levelProgressFill');
+        var clickButton = document.getElementById('clickButton');
+        var clickHint = document.getElementById('clickHint');
+        var dailyRewardButton = document.getElementById('dailyRewardButton');
+        var gameMessage = document.getElementById('gameMessage');
+        var upgradesListEl = document.getElementById('upgradesList');
+        var missionsListEl = document.getElementById('missionsList');
+
+        var UPGRADE_ORDER = ['recyclingMachine', 'recyclingPlant', 'wasteTruck', 'sortingCenter', 'ecoFactory'];
+
+        function getByPathLocal(obj, path) {
+            var parts = path.split('.');
+            var cur = obj;
+            for (var i = 0; i < parts.length; i++) {
+                if (cur == null) return null;
+                cur = cur[parts[i]];
+            }
+            return (typeof cur === 'string') ? cur : null;
+        }
+
+        function translate(key, fallback) {
+            return (window.__chiqindiDict && getByPathLocal(window.__chiqindiDict, key)) || fallback;
+        }
+
+        document.addEventListener('chiqindi:language-changed', function (e) {
+            window.__chiqindiDict = e.detail && e.detail.dict;
+            renderAll();
+        });
+
+        function showMessage(text, type) {
+            gameMessage.textContent = text;
+            gameMessage.className = 'form-message visible ' + type;
+            setTimeout(function () {
+                gameMessage.className = 'form-message';
+            }, 2500);
+        }
+
+        function upgradeName(type) {
+            var map = {
+                recyclingMachine: translate('game.upgradeRecyclingMachine', 'Recycling Machine'),
+                recyclingPlant: translate('game.upgradeRecyclingPlant', 'Recycling Plant'),
+                wasteTruck: translate('game.upgradeWasteTruck', 'Waste Truck'),
+                sortingCenter: translate('game.upgradeSortingCenter', 'Sorting Center'),
+                ecoFactory: translate('game.upgradeEcoFactory', 'Eco Factory')
+            };
+            return map[type] || type;
+        }
+
+        function missionName(id) {
+            var map = {
+                first_waste: translate('game.missionFirstWaste', 'Submit your first waste'),
+                recycle_5kg: translate('game.missionRecycle5kg', 'Recycle 5 kg total'),
+                recycle_10kg: translate('game.missionRecycle10kg', 'Recycle 10 kg total'),
+                play_today: translate('game.missionPlayToday', 'Play today'),
+                earn_100_coins: translate('game.missionEarn100', 'Earn 100 coins'),
+                level_5: translate('game.missionLevel5', 'Reach Level 5')
+            };
+            return map[id] || id;
+        }
+
+        function renderStats() {
+            if (!window.Chiqindi || !window.Chiqindi.game || !window.Chiqindi.storage) return;
+            var wallet = window.Chiqindi.storage.getWallet();
+            var game = window.Chiqindi.game.getGameState();
+            var cps = window.Chiqindi.game.getTotalCPS(game);
+            var xpInLevel = game.xp % window.Chiqindi.game.XP_PER_LEVEL;
+
+            statCoins.textContent = (wallet.coins || 0) + ' \uD83E\uDE99';
+            statLevel.textContent = game.level;
+            statCps.textContent = cps.toFixed(1) + '/s';
+            levelProgressFill.style.width = Math.min(100, (xpInLevel / window.Chiqindi.game.XP_PER_LEVEL) * 100) + '%';
+
+            var remaining = window.Chiqindi.game.MAX_CLICKS_PER_DAY - (game.clicksDate === new Date().toISOString().slice(0, 10) ? game.clicksToday : 0);
+            if (remaining <= 0) {
+                clickHint.textContent = translate('game.dailyLimitReached', "You've reached today's click limit. Come back tomorrow!");
+                clickButton.disabled = true;
+            } else {
+                clickHint.textContent = remaining + ' ' + translate('game.clicksLeftToday', 'clicks left today');
+                clickButton.disabled = false;
+            }
+
+            var today = new Date().toISOString().slice(0, 10);
+            dailyRewardButton.disabled = (game.dailyRewardClaimedDate === today);
+        }
+
+        function renderUpgrades() {
+            if (!window.Chiqindi || !window.Chiqindi.game || !window.Chiqindi.storage) return;
+            var game = window.Chiqindi.game.getGameState();
+            var wallet = window.Chiqindi.storage.getWallet();
+            var html = '';
+            UPGRADE_ORDER.forEach(function (type) {
+                var owned = game.upgrades[type] || 0;
+                var cost = window.Chiqindi.game.getUpgradeCost(type, owned);
+                var cps = window.Chiqindi.game.UPGRADES[type].cps;
+                var canAfford = (wallet.coins || 0) >= cost;
+                html += '<div class="upgrade-card">' +
+                    '<div class="upgrade-info">' +
+                        '<div class="upg-name">' + upgradeName(type) + ' (x' + owned + ')</div>' +
+                        '<div class="upg-meta">+' + cps + ' ' + translate('game.perSecondShort', 'coins/sec') + '</div>' +
+                    '</div>' +
+                    '<button type="button" class="upgrade-buy-btn" data-type="' + type + '"' + (canAfford ? '' : ' disabled') + '>' +
+                        cost + ' \uD83E\uDE99' +
+                    '</button>' +
+                '</div>';
+            });
+            upgradesListEl.innerHTML = html;
+
+            upgradesListEl.querySelectorAll('.upgrade-buy-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var result = window.Chiqindi.game.buyUpgrade(btn.getAttribute('data-type'));
+                    if (result.success) {
+                        showMessage(translate('game.upgradeBought', 'Upgrade purchased!'), 'success');
+                        renderAll();
+                    } else if (result.reason === 'insufficientCoins') {
+                        showMessage(translate('game.errorInsufficientCoins', "You don't have enough coins for this upgrade."), 'error');
+                    }
+                });
+            });
+        }
+
+        function renderMissions() {
+            if (!window.Chiqindi || !window.Chiqindi.game) return;
+            var missions = window.Chiqindi.game.getMissionsStatus();
+            var html = '';
+            missions.forEach(function (m) {
+                html += '<div class="mission-card' + (m.completed ? ' completed' : '') + '">' +
+                    '<div class="mission-info">' +
+                        '<div class="mis-name">' + missionName(m.id) + '</div>' +
+                        '<div class="mis-reward">+' + m.reward + ' \uD83E\uDE99</div>' +
+                    '</div>' +
+                    (m.completed
+                        ? '<span class="mission-done-badge">' + translate('game.claimed', 'Claimed') + '</span>'
+                        : '<button type="button" class="mission-claim-btn" data-id="' + m.id + '"' + (m.eligible ? '' : ' disabled') + '>' + translate('game.claim', 'Claim') + '</button>') +
+                '</div>';
+            });
+            missionsListEl.innerHTML = html;
+
+            missionsListEl.querySelectorAll('.mission-claim-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var result = window.Chiqindi.game.claimMission(btn.getAttribute('data-id'));
+                    if (result.success) {
+                        showMessage(translate('game.missionClaimed', 'Mission reward claimed!'), 'success');
+                        renderAll();
+                    }
+                });
+            });
+        }
+
+        function renderAll() {
+            renderStats();
+            renderUpgrades();
+            renderMissions();
+        }
+
+        if (clickButton) {
+            clickButton.addEventListener('click', function () {
+                if (!window.Chiqindi || !window.Chiqindi.game) return;
+                var result = window.Chiqindi.game.click();
+                if (!result.success && result.reason === 'dailyLimitReached') {
+                    showMessage(translate('game.dailyLimitReached', "You've reached today's click limit. Come back tomorrow!"), 'error');
+                }
+                renderStats();
+                renderUpgrades();
+            });
+        }
+
+        if (dailyRewardButton) {
+            dailyRewardButton.addEventListener('click', function () {
+                if (!window.Chiqindi || !window.Chiqindi.game) return;
+                var result = window.Chiqindi.game.claimDailyReward();
+                if (result.success) {
+                    showMessage(translate('game.dailyRewardClaimed', 'Daily reward claimed!') + ' +' + result.coins + ' \uD83E\uDE99', 'success');
+                    renderAll();
+                } else {
+                    showMessage(translate('game.dailyRewardAlreadyClaimed', "You've already claimed today's reward."), 'error');
+                }
+            });
+        }
+
+        if (window.Chiqindi && window.Chiqindi.game) {
+            window.Chiqindi.game.applyOfflineProgress();
+        }
+        renderAll();
+    });
+</script>
+
+    <!-- Telegram Mini App integration (Phase 4) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="js/telegram.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/recycling.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/nav.js"></script>
+</body>
+</html>
